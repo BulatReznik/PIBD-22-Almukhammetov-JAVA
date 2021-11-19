@@ -6,8 +6,9 @@ import java.util.Random;
 
 public class FormDumpCar extends JPanel
 {
-    private DumpCar dumpcar;
-    JButton buttonCreateDumpCar = new JButton("Создать самосвал");
+    private ITransport dumpcar;
+    JButton buttonCreateDumpcar = new JButton("Создать Самосвал");
+    JButton buttonCreateTruckcar = new JButton("Создать Грузовик");
     JButton buttonUp = new JButton(new ImageIcon("Resources/Up.png"));
     JButton buttonDown = new JButton(new ImageIcon("Resources/Down.png"));
     JButton buttonLeft = new JButton(new ImageIcon("Resources/Left.png"));
@@ -37,6 +38,28 @@ public class FormDumpCar extends JPanel
             draw();
         }
     }
+
+    public class createListener implements  ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent event)
+        {
+            String actionCommand = event.getActionCommand();
+            Random rnd = new Random();
+            switch (actionCommand)
+            {
+                case "truck":
+                    dumpcar = new TruckCar(rnd.nextInt(3000) + 1000, rnd.nextInt(2000) + 10000, Color.blue);
+                    break;
+                case "dumpcar":
+                    dumpcar = new DumpCar(rnd.nextInt(3000) + 1000, rnd.nextInt(2000) + 10000, Color.red, Color.yellow, true, true, true);
+                    break;
+            }
+            dumpcar.SetPosition(rnd.nextInt(100), rnd.nextInt(100), getWidth(), getHeight());
+            draw();
+        }
+    }
+
     public void buttonAdd(JButton butt, int x, int y, int width, int height)
     {
         butt.setBounds(x, y, width, height);
@@ -55,26 +78,20 @@ public class FormDumpCar extends JPanel
         buttonDown.setActionCommand("down");
         buttonUp.setActionCommand("up");
         buttonLeft.setActionCommand("left");
-        buttonAdd(buttonCreateDumpCar, 5, 5, 150, 20);
+        buttonCreateTruckcar.setActionCommand("truck");
+        buttonCreateDumpcar.setActionCommand("dumpcar");
+        buttonAdd(buttonCreateTruckcar, 5, 5, 205, 20);
+        buttonAdd(buttonCreateDumpcar, 210, 5, 205, 20);
         buttonAdd(buttonRight, 1228, 758, 30, 30);
         buttonAdd(buttonDown, 1192, 758, 30, 30);
         buttonAdd(buttonUp, 1192, 722, 30, 30);
         buttonAdd(buttonLeft, 1156, 758, 30, 30);
-        buttonCreateDumpCar.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                Random rnd = new Random();
-                dumpcar = new DumpCar();
-                dumpcar.Init(rnd.nextInt(3000) + 1000, rnd.nextInt(2000) + 10000, Color.red, Color.yellow, true, true, true);
-                dumpcar.SetPosition(rnd.nextInt(100), rnd.nextInt(100), getWidth(), getHeight());
-                draw();
-            }
-        });
+        buttonCreateTruckcar.addActionListener(new createListener());
+        buttonCreateDumpcar.addActionListener(new createListener());
         buttonUp.addActionListener(new clickListener());
         buttonDown.addActionListener(new clickListener());
         buttonLeft.addActionListener(new clickListener());
         buttonRight.addActionListener(new clickListener());
     }
 }
+
