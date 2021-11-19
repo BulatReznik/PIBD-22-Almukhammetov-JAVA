@@ -10,6 +10,7 @@ public class MainWindow extends JFrame
         add(new FormDumpCar());
         setVisible(true);
     }
+
     public static void main(String[] args)
     {
         MainWindow MainWindow = new MainWindow();
