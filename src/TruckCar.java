@@ -30,22 +30,23 @@ public class TruckCar extends Vehicle
                 }
                 break;
             case Left:
-                if (startPosX - step >= 0) {
+                if (startPosX - step >= 0)
+                {
                     startPosX -= step;
                 }
                 break;
             case Up:
-                if (startPosY - step >= 0) {
+                if (startPosY - step >= 0)
+                {
                     startPosY -= step;
                 }
                 break;
             case Down:
-                if (startPosY + step <= pictureHeight - truckHeight) {
+                if (startPosY + step <= pictureHeight - truckHeight)
+                {
                     startPosY += step;
                 }
                 break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + direction);
         }
     }
     public void DrawTransport(Graphics gr)
