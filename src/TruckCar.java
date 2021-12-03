@@ -21,9 +21,11 @@ public class TruckCar extends Vehicle
     public void MoveTransport(Direction direction)
     {
         float step = MaxSpeed * 100 / Weight;
-        switch (direction) {
+        switch (direction)
+        {
             case Right:
-                if (startPosX + step <= pictureWidth - truckWidth) {
+                if (startPosX + step <= pictureWidth - truckWidth)
+                {
                     startPosX += step;
                 }
                 break;
@@ -42,11 +44,12 @@ public class TruckCar extends Vehicle
                     startPosY += step;
                 }
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + direction);
         }
     }
     public void DrawTransport(Graphics gr)
     {
-        gr.clearRect(0, 0, 1366, 875);
         Graphics2D g2d = (Graphics2D)gr;
         //корпус
         g2d.setColor(MainColor);

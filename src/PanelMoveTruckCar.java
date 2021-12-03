@@ -2,13 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 
-public class FormDumpCar extends JPanel
+public class PanelMoveTruckCar extends JPanel
 {
     private ITransport dumpcar;
-    JButton buttonCreateDumpcar = new JButton("Создать Самосвал");
-    JButton buttonCreateTruckcar = new JButton("Создать Грузовик");
     JButton buttonUp = new JButton(new ImageIcon("Resources/Up.png"));
     JButton buttonDown = new JButton(new ImageIcon("Resources/Down.png"));
     JButton buttonLeft = new JButton(new ImageIcon("Resources/Left.png"));
@@ -35,28 +32,7 @@ public class FormDumpCar extends JPanel
                     dumpcar.MoveTransport(Direction.Right);
                     break;
             }
-            draw();
-        }
-    }
-
-    public class createListener implements  ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent event)
-        {
-            String actionCommand = event.getActionCommand();
-            Random rnd = new Random();
-            switch (actionCommand)
-            {
-                case "truck":
-                    dumpcar = new TruckCar(rnd.nextInt(3000) + 1000, rnd.nextInt(2000) + 10000, Color.blue);
-                    break;
-                case "dumpcar":
-                    dumpcar = new DumpCar(rnd.nextInt(3000) + 1000, rnd.nextInt(2000) + 10000, Color.red, Color.yellow, true, true, true);
-                    break;
-            }
-            dumpcar.SetPosition(rnd.nextInt(100), rnd.nextInt(100), getWidth(), getHeight());
-            draw();
+            repaint();
         }
     }
 
@@ -65,12 +41,21 @@ public class FormDumpCar extends JPanel
         butt.setBounds(x, y, width, height);
         add(butt);
     }
-    private void draw()
-    {
-        dumpcar.DrawTransport(getGraphics());
-        paintComponents(getGraphics());
+    public void SetCarTruck(ITransport dumpcar) {
+        this.dumpcar = dumpcar;
+        this.dumpcar.SetPosition(50, 50, 1366, 875);
     }
-    public FormDumpCar()
+    public void Draw(Graphics g2d)
+    {
+        dumpcar.DrawTransport(g2d);
+    }
+    @Override
+    public void paintComponent(Graphics g2d)
+    {
+        super.paintComponent(g2d);
+        Draw(g2d);
+    }
+    public PanelMoveTruckCar()
     {
         setBackground(Color.white);
         setLayout(null);
@@ -78,20 +63,13 @@ public class FormDumpCar extends JPanel
         buttonDown.setActionCommand("down");
         buttonUp.setActionCommand("up");
         buttonLeft.setActionCommand("left");
-        buttonCreateTruckcar.setActionCommand("truck");
-        buttonCreateDumpcar.setActionCommand("dumpcar");
-        buttonAdd(buttonCreateTruckcar, 5, 5, 205, 20);
-        buttonAdd(buttonCreateDumpcar, 210, 5, 205, 20);
         buttonAdd(buttonRight, 1228, 758, 30, 30);
         buttonAdd(buttonDown, 1192, 758, 30, 30);
         buttonAdd(buttonUp, 1192, 722, 30, 30);
         buttonAdd(buttonLeft, 1156, 758, 30, 30);
-        buttonCreateTruckcar.addActionListener(new createListener());
-        buttonCreateDumpcar.addActionListener(new createListener());
         buttonUp.addActionListener(new clickListener());
         buttonDown.addActionListener(new clickListener());
         buttonLeft.addActionListener(new clickListener());
         buttonRight.addActionListener(new clickListener());
     }
 }
-

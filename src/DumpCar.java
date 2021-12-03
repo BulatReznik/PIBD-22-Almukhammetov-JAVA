@@ -40,7 +40,6 @@ public class DumpCar extends TruckCar
     @Override
     public void DrawTransport(Graphics gr)
     {
-        gr.clearRect(0, 0, 1366, 875);
         Graphics2D g2d = (Graphics2D)gr;
         super.DrawTransport(gr);
         //стекла
