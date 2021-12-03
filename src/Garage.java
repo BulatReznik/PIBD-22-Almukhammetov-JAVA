@@ -1,8 +1,10 @@
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Garage<T extends ITransport, M extends IWheels>
 {
-    private final Object[] places;
+    private ArrayList<T> places;
+    private final int maxCount;
     private final int pictureWidth;
     private final int pictureHeight;
     private final int placeSizeWidth = 260;
@@ -10,38 +12,45 @@ public class Garage<T extends ITransport, M extends IWheels>
     private final int garageWidth;
     private final int garageHeight;
 
+    public T getTruckCar(int index)
+    {
+        if (index > -1 && index < places.size())
+        {
+            return places.get(index);
+        }
+        else
+        {
+            return null;
+        }
+    }
     public Garage(int picWidth, int picHeight)
     {
+        places = new ArrayList<T>();
         garageWidth = picWidth / placeSizeWidth;
         garageHeight = picHeight / placeSizeHeight;
-        places = new Object[garageWidth * garageHeight];
         pictureWidth = picWidth;
         pictureHeight = picHeight;
+        maxCount = garageWidth * garageHeight;
     }
 
     public int plus(T dumpcar)
     {
-        int i = 0;
-        while (i < places.length && places[i] != null)
+        if (places.size() < maxCount)
         {
-            i++;
+            places.add(dumpcar);
+            return places.size() - 1;
         }
-        if (i < places.length && places[i] == null)
-        {
-            dumpcar.SetPosition(i % garageWidth * placeSizeWidth + 10, i / garageWidth * placeSizeHeight + 5, pictureWidth, pictureHeight);
-            places[i] = dumpcar;
-            return i;
-        } else
+        else
         {
             return -1;
         }
     }
     public T minus(int index)
     {
-        if (index > -1 && index < places.length && places[index] != null)
+        if (index > -1 && index < places.size())
         {
-            T bufTruck = (T) places[index];
-            places[index] = null;
+            T bufTruck = places.get(index);
+            places.remove(index);
             return bufTruck;
         }
         else
@@ -49,48 +58,29 @@ public class Garage<T extends ITransport, M extends IWheels>
             return null;
         }
     }
-    public boolean more(Garage<ITransport,IWheels> L,int count)
+    public boolean more(int count)
     {
-        int length = L.places.length;
-        int fullness = 0;
-        for (int i = 0; i < length; ++i)
-        {
-            if (places[i] != null)
-            {
-                fullness += 1;
-            }
-        }
-        return fullness > count;
+        return places.size() > count;
     }
-    public boolean less(Garage<ITransport,IWheels> L, int count)
+    public boolean less(int count)
     {
-        int length = L.places.length;
-        int fullness = 0;
-        for (int i = 0; i < length; ++i)
-        {
-            if (places[i] != null)
-            {
-                fullness += 1;
-            }
-        }
-        return fullness < count;
+        return places.size() < count;
     }
     public void Draw(Graphics gr)
     {
         gr.setColor(Color.black);
         DrawMarking(gr);
-        for (int i = 0; i < places.length; i++)
+        for (int i = 0; i < places.size(); i++)
         {
-            if (places[i] != null)
-            {
-                ((T) places[i]).DrawTransport(gr);
-            }
+            places.get(i).SetPosition(i % garageWidth * placeSizeWidth + 10, i / garageWidth * placeSizeHeight + 5, pictureWidth, pictureHeight);
+            places.get(i).DrawTransport(gr);
         }
     }
     public void DrawMarking(Graphics gr)
     {
         gr.setColor(Color.black);
-        for (int i = 0; i < garageWidth; i++) {
+        for (int i = 0; i < garageWidth; i++)
+        {
             for (int j = 0; j < garageHeight + 1; ++j)
             {
                 gr.drawLine(i * placeSizeWidth, j * placeSizeHeight, i *
